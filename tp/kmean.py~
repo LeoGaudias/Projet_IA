@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import csv
 from random import *
 from math import *
@@ -10,6 +9,7 @@ class KMeanClusterer():
 		return self.k
 
 	def getCluster(self,i):
+		#print("lg " + str(len(self.clusters)) + " i" + str(i))
 		if(len(self.clusters) == 0):
 		    return 0
 		else:
@@ -28,19 +28,28 @@ class KMeanClusterer():
 	
 	def assignement(self):
 		fini = True
+		tot = 0
+		for cluster in self.clusters:
+			tot = tot + len(cluster.getObservations())
+		#print("avant assignement tot : "+str(tot))
 		if len(self.getCluster(0).getObservations()) == 0:
 			fini = False
-			for cluster in self.data_matrix:
-			      for obs in cluster:
-				    targetCluster = self.findNearestCluster(obs)
-				    targetCluster.addObservation(obs)
+			self.init_assignement()
 		else:
 			for cluster in self.clusters:	
 				for observation in cluster.getObservations():
+					#print(str(observation))
 					targetCluster = self.findNearestCluster(observation)
+					#print str(k)
 					if targetCluster != cluster:  
+					#print("obs a enlever" +str(observation))
+					#print("; obs enlevee " + str(cluster.removeObservationAt(k)))
+						#print observation
 						cluster.removeObservation(observation)
-						
+						tot = 0
+						for cluster in self.clusters:
+							tot = tot + len(cluster.getObservations())
+					#	print("normalement 149 tot : "+str(tot))
 						targetCluster.addObservation(observation)
 						fini = False
 				
@@ -57,28 +66,31 @@ class KMeanClusterer():
 	      
 	def performClustering(self):
 		while self.assignement() == False:
-			self.update()
+		   self.update()
 	      
 	def update(self):
-		for i in range(0,self.getClusterNumber()):
-		    currentCluster = self.getCluster(i)
-		    currentCluster.meanCentroid()
+		pass
 
 	def __init__(self,k,datafile):
 		norm = Normalizer()
-		data = norm.load_csv(datafile)
-		self.clusters = []
-		#self.data_matrix = [data[i:i+k] for i in range(0,len(data), k)]
-		self.data_matrix = list(self.split(data, k))
-		#print (self.data_matrix[0])
-		for i in range(0,k):
+       	        data = norm.load_csv(datafile)
+       	        self.clusters = []
+       	        self.data_matrix = [data[i:i+k] for i in range(0,len(data), k)]
+       	        for i in range(0,k):
 			l = randint(0,len(self.data_matrix[i])-1)
 			self.clusters.append(Cluster(self.data_matrix[i][l]))
-		self.k = k
-		
-	def split(self,a, n):
-		k, m = len(a) / n, len(a) % n
-		return (a[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in xrange(n))
+       	        self.k = k
+       	        
+       	      #  for i in xrange(0, len(iris_data_matrix),k):
+	
+	def init_assignement(self):
+			#print (str(observations[pos][0]))
+		for cluster in self.data_matrix:
+			for obs in cluster:
+			      targetCluster = self.findNearestCluster(obs)
+			      targetCluster.addObservation(obs)
+			#self.clusters.append(Cluster(centroid[i], observations[i]))
+
 		
 
 class Cluster():
@@ -90,28 +102,27 @@ class Cluster():
 		return self.centroid
 	      
 	def removeObservation(self,observation):
+		"""newtab = []
+		for line in self.observations:
+			if line != observation:
+				newtab.append(line)
+		if len(newtab) == len(self.observations):
+			print("pb")
+		else:
+			print("pas de pb")
+		self.observations = list(newtab)"""
 		self.observations.remove(observation)
+		
 		
 	def addObservation(self, observation):
 		self.observations.append(observation)
 		
 	def setObservations(self,observations):
 		self.observations = list(observations)
-		
-	def meanCentroid(self):
-		mean = [0]*(len(self.centroid)-1)
-		if len(self.observations) >0:
-		      for obs in self.observations:
-			    for i in range(0,len(obs)-1): #ne pas prendre le nom de la classe
-				  mean[i] += float(obs[i])
-		      for i in range(0,len(obs)-1):
-			    mean[i] = mean[i]/len(self.observations)
-		      self.centroid = mean
 
 	def __init__(self, centroid):
 		self.centroid = centroid
 		self.observations = []
-
 
 
 
