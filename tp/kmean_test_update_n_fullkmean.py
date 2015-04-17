@@ -30,7 +30,7 @@ class Test(unittest.TestCase):
         
         # perform initialization
         k = 3
-        datafile="iris.csv"
+        datafile="kddcup.data_10_percent_corrected"
         kMeanClusterer = KMeanClusterer(k,datafile)
         kMeanClusterer.performClustering()
         
@@ -68,7 +68,7 @@ class Test(unittest.TestCase):
         print("** test KMean update **")
         
         k = 3
-        datafile="iris.csv"
+        datafile="kddcup.data_10_percent_corrected"
         kMeanClusterer = KMeanClusterer(k,datafile)
         
         kMeanClusterer.assignement()
