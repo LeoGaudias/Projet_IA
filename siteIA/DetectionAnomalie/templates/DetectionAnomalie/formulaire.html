@@ -1,0 +1,35 @@
+{% include "DetectionAnomalie/header.html" %}
+    <h1>Sélection des informations</h1>
+    <form action="{% url 'traiter' %}" method="POST">
+        {% csrf_token %}
+
+        <div class="input-group">
+            <label>Sélection du dataset</label>
+            <select id="files" name="files" class="form-control">
+                {% for file in files %}
+                <option value="{{ file }}">{{ file }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="k">K</label>
+            <input type="number" id="k" name="k" min="1" value="1" class="form-control" />
+        </div>
+
+        <div class="input-group">
+            <label for="N">N</label>
+            <input type="number" id="N" name="N" min="0" step="0.01" value="1" class="form-control" />
+        </div>
+
+        <div class="input-group">
+            <label>Choisissez les champs</label>
+            {% for file_name in files_name %}
+            <label class="checkbox-inline"><input type="checkbox" value="{{file_name}}" name="champ{{forloop.counter}}" id="champ{{forloop.counter}}"/>{{file_name}}</label>
+            {% endfor %}
+        </div>
+
+        <input type="submit" value="Lancer" class="btn btn-primary"/>
+    </form>
+
+    {% include "DetectionAnomalie/footer.html" %}

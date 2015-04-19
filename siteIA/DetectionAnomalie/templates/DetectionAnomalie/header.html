@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Page des scores</title>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    {% load staticfiles %}
+    <script src="{% static "Assets/js/jquery-2.1.3.min.js" %}" charset="utf-8"></script>
+
+    <link rel="stylesheet" href="{% static "Assets/css/bootstrap.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "Assets/css/bootstrap.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "Assets/css/bootstrap.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "Assets/css/bootstrap.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "Assets/css/jumbotron-narrow.css" %}" type="text/css">
+</head>
+<body>
+    <div class="container">
+        <div class="header clearfix">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" class="active"><a href="{% url 'home' %}">Home</a></li>
+                    <li role="presentation"><a href="#">About</a></li>
+                    <li role="presentation"><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+
+            <h3 class="text-muted">Détection d'anomalie</h3>
+        </div>
