@@ -5,6 +5,6 @@ urlpatterns = [
     # Examples:
     # url(r'^$', 'siteIA.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-
+    url(r'^DetectionAnomalie/', include('DetectionAnomalie.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ]
