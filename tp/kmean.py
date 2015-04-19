@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import csv
 from random import *
 from math import *
@@ -63,17 +62,31 @@ class KMeanClusterer():
             currentCluster = self.getCluster(i)
             currentCluster.updateCentroid()
 
-    def __init__(self, k, datafile):
+    def extractComportements(self):
+        data = []
+        for cluster in self.clusters:
+            observations = cluster.getObservations()
+            for obs in observations:
+                obs.append(self.computeDistance(obs, cluster.getCentroid()))
+            observations.sort(key = lambda colonnes : colonnes[-1])
+            for obs in observations:
+                obs.pop()
+            n = int((self.n*len(observations))/100)
+            data.append(observations[:n])
+        return data
+
+    def __init__(self, k, datafile,n):
         norm = Normalizer()
         data = norm.load_csv(datafile)
         self.clusters = []
         # self.data_matrix = [data[i:i+k] for i in range(0,len(data), k)]
         self.data_matrix = list(split(data, k))
-        print(self.data_matrix[0])
+        #print(self.data_matrix[0])
         for i in range(0, k):
             l = randint(0, len(self.data_matrix[i]) - 1)
             self.clusters.append(Cluster(self.data_matrix[i][l]))
         self.k = k
+        self.n = n
 
 
 def split(a, n):
@@ -103,7 +116,7 @@ class Cluster():
         if len(self.observations) > 0:
             for obs in self.observations:  # 50
                 for i in range(len(obs) - 1):  # ne pas prendre le nom de la classe
-                    print(str(i) + " " + str(j))
+                    #print(str(i) + " " + str(j))
 
                     mean[i] += float(obs[i])
                 j+=1

@@ -31,7 +31,7 @@ class Test(unittest.TestCase):
         # perform initialization
         k = 3
         datafile="kddcup.data_10_percent_corrected"
-        kMeanClusterer = KMeanClusterer(k,datafile)
+        kMeanClusterer = KMeanClusterer(k,datafile,5) #n =5 par exemple
         kMeanClusterer.performClustering()
         
         #total number of lines in the dataset
@@ -69,7 +69,7 @@ class Test(unittest.TestCase):
         
         k = 3
         datafile="kddcup.data_10_percent_corrected"
-        kMeanClusterer = KMeanClusterer(k,datafile)
+        kMeanClusterer = KMeanClusterer(k,datafile,5) #n =5 par exemple
         
         kMeanClusterer.assignement()
         kMeanClusterer.update()
