@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from os import listdir
 from os.path import isfile, join
+
+from kmean import KMeanClusterer
 
 # Create your views here.
 
@@ -27,16 +29,39 @@ def files_name():
     array = []
     for fil in file:
         array.append(read_file("files/name/"+fil))
-    return array
+
+    return array[0]
 
 
 def read_file(path):
     fichier = open(path, 'r+')
-    infos = fichier.read().split()
+
+    next(fichier)
+    infos = []
+    for line in fichier:
+        infos.append(line.split(':')[0])
+
     return infos
 
 
 def traiter(request):
-    return render(request, 'DetectionAnomalie/affichage.html')
-    #return HttpResponse("waiting for "+request.POST.get('files', 'derp')+" with "+request.POST.get('k', '0')+
-    #                    " clusters and "+request.POST.get('N', '0')+" % error")
+    try:
+        file = request.POST['files']
+        N = int(request.POST['N'])
+        k = int(request.POST['k'])
+
+        kMeanClusterer = KMeanClusterer(k, "files/"+file, N)
+        kMeanClusterer.performClustering()
+
+        text = ""
+
+        for obs in kMeanClusterer.getCluster(0).getObservations():
+            for obj in obs:
+                text += obj
+
+
+    except(KeyError):
+        return redirect('formulaire')
+
+    #return render(request, 'DetectionAnomalie/affichage.html')
+    return HttpResponse(text)

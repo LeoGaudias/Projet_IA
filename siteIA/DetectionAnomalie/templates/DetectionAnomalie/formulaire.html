@@ -25,11 +25,19 @@
         <div class="input-group">
             <label>Choisissez les champs</label>
             {% for file_name in files_name %}
-            <label class="checkbox-inline"><input type="checkbox" value="{{file_name}}" name="champ{{forloop.counter}}" id="champ{{forloop.counter}}"/>{{file_name}}</label>
+                {% if forloop.counter > 4 %}
+                    <label for="champ{{forloop.counter}}" class="btn btn-default"><input type="checkbox" value="{{file_name}}" name="champ{{forloop.counter}}" id="champ{{forloop.counter}}" checked/>{{file_name}}</label>
+                {% else %}
+                    <label for="champ{{forloop.counter}}" class="btn btn-default"><input type="checkbox" value="{{file_name}}" name="champ{{forloop.counter}}" id="champ{{forloop.counter}}" />{{file_name}}</label>
+                {% endif %}
             {% endfor %}
         </div>
+        <div class="col-md-offset-4">
+            <input type="button" value="clear" class="btn btn-danger" id="clear" />
+            <input type="button" value="reset" class="btn btn-success" id="reset" />
 
-        <input type="submit" value="Lancer" class="btn btn-primary"/>
+            <input type="submit" value="Lancer" class="btn btn-primary"/>
+        </div>
     </form>
 
     {% include "DetectionAnomalie/footer.html" %}
