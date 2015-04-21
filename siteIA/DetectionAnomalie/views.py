@@ -4,7 +4,8 @@ from django.http import HttpResponse
 from os import listdir
 from os.path import isfile, join
 
-from kmean import KMeanClusterer
+from DetectionAnomalie.kmean import KMeanClusterer
+import json
 
 # Create your views here.
 
@@ -53,15 +54,13 @@ def traiter(request):
         kMeanClusterer = KMeanClusterer(k, "files/"+file, N)
         kMeanClusterer.performClustering()
 
-        text = ""
-
-        for obs in kMeanClusterer.getCluster(0).getObservations():
-            for obj in obs:
-                text += obj
+        json_data = []
+        for i in range(kMeanClusterer.getClusterNumber()):
+            json_data.append(kMeanClusterer.getCluster(i).getObservations())
 
 
     except(KeyError):
         return redirect('formulaire')
 
     #return render(request, 'DetectionAnomalie/affichage.html')
-    return HttpResponse(text)
+    return HttpResponse(json.dumps(json_data), content_type='application/json')

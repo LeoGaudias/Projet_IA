@@ -1,7 +1,7 @@
 import csv
 from random import *
 from math import *
-from normalization import Normalizer
+from DetectionAnomalie.normalization import Normalizer
 
 
 class KMeanClusterer():
