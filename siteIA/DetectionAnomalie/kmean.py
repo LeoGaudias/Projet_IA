@@ -75,9 +75,9 @@ class KMeanClusterer():
             data.append(observations[:n])
         return data
 
-    def __init__(self, k, datafile, n):
+    def __init__(self, k, datafile, n, values):
         norm = Normalizer()
-        data = norm.load_csv(datafile)
+        data = norm.load_csv(datafile, values)
         self.clusters = []
         # self.data_matrix = [data[i:i+k] for i in range(0,len(data), k)]
         self.data_matrix = list(split(data, k))

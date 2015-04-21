@@ -25,7 +25,7 @@ class Normalizer():
         for row in iris_data_matrix:
             print(row)
 
-    def load_csv(self, dataFile):
+    def load_csv(self, dataFile, values):
         # print("Load CSV from "+dataFile)
         
         data_matrix = []
@@ -39,5 +39,10 @@ class Normalizer():
                 firstLine = False
                 rowLength = len(row)
             elif (len(row) == rowLength):  #otherwise remove void lines
-                data_matrix.append(columns[5:len(columns)-1])  # temporaire
+                tab = []
+                for column in values:
+                    if int(column) not in [2, 3, 4, 41]:
+                        tab.append(columns[int(column)])
+
+                data_matrix.append(tab)  # temporaire
         return data_matrix
