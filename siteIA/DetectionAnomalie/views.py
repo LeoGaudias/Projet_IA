@@ -52,20 +52,26 @@ def traiter(request):
         k = int(request.POST['k'])
 
         values = []
+        names = []
         for i in request.POST:
             if i not in ['N', 'k', 'files', 'csrfmiddlewaretoken']:
                 values.append(i.split('p')[1])
+                names.append(request.POST[i])
 
         kMeanClusterer = KMeanClusterer(k, "files/"+file, N, values)
         kMeanClusterer.performClustering()
 
+
         json_data = []
         for i in range(kMeanClusterer.getClusterNumber()):
-            json_data.append(kMeanClusterer.getCluster(i).getObservations())
+            cluster = {'number' : i, 'obs' : kMeanClusterer.getCluster(i).getObservations()}
+            json_data.append(cluster)
+
+        tab = {'names' : names, 'values' : json_data}
 
 
     except(KeyError):
         return redirect('formulaire')
 
-    #return render(request, 'DetectionAnomalie/affichage.html')
-    return HttpResponse(json.dumps(json_data), content_type='application/json')
+    return render(request, 'DetectionAnomalie/affichage.html', {'json' : json.dumps(tab)})
+    #return HttpResponse()
