@@ -6,7 +6,7 @@ from os.path import isfile, join
 
 from DetectionAnomalie.kmean import KMeanClusterer
 import json
-from math import *
+from math import sqrt, trunc
 
 # Create your views here.
 
@@ -107,9 +107,8 @@ def traiter(request):
 
         json2 = {'nodes': nodes, 'links': links}
 
-
         json_data = kMeanClusterer.extractValuesGraph()
-        tab = {'names' : names, 'values' : json_data}
+        tab = {'names': names, 'values': json_data}
 
     except(KeyError):
         return redirect('formulaire')

@@ -1,5 +1,5 @@
-body {
-  font: 10px sans-serif;
+svg {
+  font: 17px sans-serif;
 }
 
 label
@@ -13,4 +13,8 @@ svg {
 
 .arc {
   stroke: #fff;
+}
+
+#data, #json_str, #json_str2{
+    display: none;
 }
