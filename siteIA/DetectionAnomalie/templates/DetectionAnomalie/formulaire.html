@@ -23,7 +23,7 @@
         </div>
 
         <div class="input-group">
-            <label>Choisissez les champs</label>
+            <label>Choisissez les champs</label><br />
             {% for file_name in files_name %}
                 {% if forloop.counter > 4 %}
                     <label for="champ{{forloop.counter}}" class="btn btn-default"><input type="checkbox" value="{{file_name}}" name="champ{{forloop.counter}}" id="champ{{forloop.counter}}" checked/>{{file_name}}</label>

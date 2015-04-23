@@ -1,28 +1,12 @@
 {% include "DetectionAnomalie/header.html" %}
 
-<p>Vous avez séléctionné : {{ request.POST.files }} avec clusters {{ request.POST.k }} et un taux d'anomalie de {{ request.POST.N }}</p>
-<p>{{ values|safe }}</p>
+<p>Vous avez séléctionné : {{ request.POST.files }} avec clusters {{ request.POST.k }} et un taux d'anomalie de {{ request.POST.N }} %</p>
+<p>{{ tab.values|safe }}</p>
+<p>{{json2}}</p>
 
-<style>
 
-body {
-  font: 10px sans-serif;
-}
-
-svg {
-  padding: 10px 0 0 10px;
-}
-
-.arc {
-  stroke: #fff;
-}
-
-</style>
-<body>
-<script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
-var data_from_django = {{values|safe}};
-alert(data_from_django);
+var data_from_django = {{tab.values|safe}};
 var radius = 74,
     padding = 10;
 

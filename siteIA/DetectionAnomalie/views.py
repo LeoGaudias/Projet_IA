@@ -6,6 +6,7 @@ from os.path import isfile, join
 
 from DetectionAnomalie.kmean import KMeanClusterer
 import json
+from math import sqrt
 
 # Create your views here.
 
@@ -61,11 +62,44 @@ def traiter(request):
         kMeanClusterer = KMeanClusterer(k, "files/"+file, N, values)
         kMeanClusterer.performClustering()
 
+        '''json_data = []
+        for i in range(kMeanClusterer.getClusterNumber()):
+            cluster = {'number': i, 'obs': kMeanClusterer.getCluster(i).getObservations()}
+            json_data.append(cluster)
 
-        #json_data = []
-        #for i in range(kMeanClusterer.getClusterNumber()):
-         #   cluster = {'number' : i, 'obs' : kMeanClusterer.getCluster(i).getObservations()}
-          #  json_data.append(cluster)
+        tab = {'names': names, 'values': json_data}'''
+
+        tab = []
+        centroids = []
+        nodes = []
+        links = []
+        total_obs = 1
+        for i in range(kMeanClusterer.getClusterNumber()):
+            centroids.append(kMeanClusterer.getCluster(i).getCentroid())
+            num_obs = 0
+            for obs in kMeanClusterer.getCluster(i).getObservations():
+                tab_col_x = 0
+                tab_col_y = 0
+                num_col = 1
+                for column in obs:
+                    if num_col <= len(obs)/2:
+                        tab_col_x += pow(float(column), 2)
+                    else:
+                        tab_col_y += pow(float(column), 2)
+                    num_col += 1
+                tab.append({'number': i, 'x': sqrt(tab_col_x), 'y': sqrt(tab_col_y)})
+
+                nodes.append({'name': 'obs '+str(num_obs), 'group': i})
+                links.append({'source': total_obs + num_obs, 'target': total_obs+len(kMeanClusterer.getCluster(i).getObservations())+1, 'value': kMeanClusterer.computeDistance(obs, kMeanClusterer.getCluster(i).getCentroid())})
+                num_obs += 1
+            total_obs += len(kMeanClusterer.getCluster(i).getObservations())
+
+            nodes.append({'names': 'centroid '+str(i), 'group': i})
+            total_obs += 1
+
+        json1 = {'obs': tab, 'centroid': centroids}
+
+        json2 = {'nodes': nodes, 'links': links}
 
         
         json_data = kMeanClusterer.extractValuesGraph()
@@ -74,6 +108,5 @@ def traiter(request):
     except(KeyError):
         return redirect('formulaire')
 
-    #return render(request, 'DetectionAnomalie/affichage.html', {'json' : json.dumps(tab)})
-    return render(request, 'DetectionAnomalie/affichage.html', tab)
-    #return HttpResponse()
+    return render(request, 'DetectionAnomalie/affichage.html', {'tab': tab, 'json': json.dumps(json1), 'json2': json.dumps(json2)})
+    #return render(request, 'DetectionAnomalie/affichage.html', tab)

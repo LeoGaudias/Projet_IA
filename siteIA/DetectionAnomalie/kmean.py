@@ -1,3 +1,4 @@
+# coding=utf-8
 import csv
 from random import *
 from math import *
@@ -49,8 +50,11 @@ class KMeanClusterer():
     def computeDistance(self, obs, centroid):
         distance = 0
         # len - 1 pour ne pas prendre le nom de la classe
-        for i in range(0, len(obs)): # -1 enlevé
-            distance = distance + pow((float(obs[i]) - float(centroid[i])), 2)
+        try:
+            for i in range(0, len(obs)): # -1 enlevé
+                distance = distance + pow((float(obs[i]) - float(centroid[i])), 2)
+        except(IndexError):
+            pass
         return sqrt(distance)
 
 
@@ -65,10 +69,16 @@ class KMeanClusterer():
 
     def extractComportements(self,i):
         #data = []
-        cluster = self.getCluster(i)
-        observations = cluster.getObservations()
+        #cluster = self.getCluster(i)
+        observations = []
+        for obs in self.getCluster(i).getObservations():
+            tab = []
+            for val in obs:
+                tab.append(val)
+            observations.append(tab)
+
         for obs in observations:
-            obs.append(self.computeDistance(obs, cluster.getCentroid()))
+            obs.append(self.computeDistance(obs, self.getCluster(i).getCentroid()))
         observations.sort(key=lambda colonnes: colonnes[-1])
         for obs in observations:
             obs.pop()
@@ -85,7 +95,7 @@ class KMeanClusterer():
             len_anomalie = len(self.extractComportements(i))
             len_normale = len(cluster.getObservations()) - len_anomalie
             #data.append([str(i), str(len_normale), str(len_anomalie)])
-            data.append({"Cluster": str(i), "Observations anormales":str(len_anomalie),"Observations normales":str(len_normale)})
+            data.append({"Cluster": str(i), "Observations anormales": str(len_anomalie),"Observations normales": str(len_normale)})
         return(json.dumps(data))
         #f_data = dict(((j,i), data[i][j]) for i in range(len(data)) for j in range(len(data[0])) if i<j)
       
