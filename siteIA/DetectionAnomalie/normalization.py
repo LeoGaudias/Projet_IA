@@ -31,18 +31,13 @@ class Normalizer():
         data_matrix = []
          
         data = open(dataFile, 'r')
-        firstLine = True
-        rowLength = 0
-        for row in data:
-            columns = row.split(',')
-            if firstLine:  #remove column names
-                firstLine = False
-                rowLength = len(row)
-            elif (len(row) == rowLength):  #otherwise remove void lines
-                tab = []
+        reader = csv.reader(data)
+      
+        for row in reader:   
+            tab = []
+            if len(row) >0:
                 for column in values:
-                    if int(column) not in [2, 3, 4, 41]:
-                        tab.append(columns[int(column)])
-
+                    if int(column) not in [1,2, 3, 4, 41]:
+                        tab.append(row[int(column)])
                 data_matrix.append(tab)  # temporaire
         return data_matrix

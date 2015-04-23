@@ -62,16 +62,18 @@ def traiter(request):
         kMeanClusterer.performClustering()
 
 
-        json_data = []
-        for i in range(kMeanClusterer.getClusterNumber()):
-            cluster = {'number' : i, 'obs' : kMeanClusterer.getCluster(i).getObservations()}
-            json_data.append(cluster)
+        #json_data = []
+        #for i in range(kMeanClusterer.getClusterNumber()):
+         #   cluster = {'number' : i, 'obs' : kMeanClusterer.getCluster(i).getObservations()}
+          #  json_data.append(cluster)
 
+        
+        json_data = kMeanClusterer.extractValuesGraph()
         tab = {'names' : names, 'values' : json_data}
-
 
     except(KeyError):
         return redirect('formulaire')
 
-    return render(request, 'DetectionAnomalie/affichage.html', {'json' : json.dumps(tab)})
+    #return render(request, 'DetectionAnomalie/affichage.html', {'json' : json.dumps(tab)})
+    return render(request, 'DetectionAnomalie/affichage.html', tab)
     #return HttpResponse()

@@ -3,6 +3,7 @@ from random import *
 from math import *
 from DetectionAnomalie.normalization import Normalizer
 
+import json
 
 class KMeanClusterer():
     def getClusterNumber(self):
@@ -48,7 +49,7 @@ class KMeanClusterer():
     def computeDistance(self, obs, centroid):
         distance = 0
         # len - 1 pour ne pas prendre le nom de la classe
-        for i in range(0, len(obs) - 1):
+        for i in range(0, len(obs)): # -1 enlevé
             distance = distance + pow((float(obs[i]) - float(centroid[i])), 2)
         return sqrt(distance)
 
@@ -62,18 +63,32 @@ class KMeanClusterer():
             currentCluster = self.getCluster(i)
             currentCluster.updateCentroid()
 
-    def extractComportements(self):
+    def extractComportements(self,i):
+        #data = []
+        cluster = self.getCluster(i)
+        observations = cluster.getObservations()
+        for obs in observations:
+            obs.append(self.computeDistance(obs, cluster.getCentroid()))
+        observations.sort(key=lambda colonnes: colonnes[-1])
+        for obs in observations:
+            obs.pop()
+        n = int((self.n*len(observations))/100)
+            #data.append(observations[:n])
+        return observations[:n]
+
+    def extractValuesGraph(self):
+        
         data = []
-        for cluster in self.clusters:
-            observations = cluster.getObservations()
-            for obs in observations:
-                obs.append(self.computeDistance(obs, cluster.getCentroid()))
-            observations.sort(key=lambda colonnes: colonnes[-1])
-            for obs in observations:
-                obs.pop()
-            n = int((self.n*len(observations))/100)
-            data.append(observations[:n])
-        return data
+        #data.append(["Cluster","Observations normales","Observations anormales"])
+        for i in range(self.getClusterNumber()):
+            cluster = self.getCluster(i)
+            len_anomalie = len(self.extractComportements(i))
+            len_normale = len(cluster.getObservations()) - len_anomalie
+            #data.append([str(i), str(len_normale), str(len_anomalie)])
+            data.append({"Cluster": str(i), "Observations anormales":str(len_anomalie),"Observations normales":str(len_normale)})
+        return(json.dumps(data))
+        #f_data = dict(((j,i), data[i][j]) for i in range(len(data)) for j in range(len(data[0])) if i<j)
+      
 
     def __init__(self, k, datafile, n, values):
         norm = Normalizer()
@@ -115,12 +130,12 @@ class Cluster():
         j = 0
         if len(self.observations) > 0:
             for obs in self.observations:  # 50
-                for i in range(len(obs) - 1):  # ne pas prendre le nom de la classe
+                for i in range(len(obs)):  # ne pas prendre le nom de la classe -1 enlevé
                     #print(str(i) + " " + str(j))
 
                     mean[i] += float(obs[i])
                 j += 1
-            for i in range(len(obs) - 1):  # 4
+            for i in range(len(obs)):  # 4 -1 enlevé
                 mean[i] /= len(self.observations)
             self.centroid = mean
 
