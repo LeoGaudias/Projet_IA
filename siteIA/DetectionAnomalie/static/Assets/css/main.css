@@ -1,0 +1,16 @@
+body {
+  font: 10px sans-serif;
+}
+
+label
+{
+    padding : 5px;
+}
+
+svg {
+  padding: 0px auto auto 10px;
+}
+
+.arc {
+  stroke: #fff;
+}
