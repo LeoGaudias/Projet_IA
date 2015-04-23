@@ -23,14 +23,19 @@
         </div>
 
         <div class="input-group">
+            <input type="hidden" name="cache" id="cache" />
             <label>Choisissez les champs</label><br />
-            {% for file_name in files_name %}
-                {% if forloop.counter > 4 %}
-                    <label for="champ{{forloop.counter}}" class="btn btn-default"><input type="checkbox" value="{{file_name}}" name="champ{{forloop.counter}}" id="champ{{forloop.counter}}" checked/>{{file_name}}</label>
-                {% else %}
-                    <label for="champ{{forloop.counter}}" class="btn btn-default"><input type="checkbox" value="{{file_name}}" name="champ{{forloop.counter}}" id="champ{{forloop.counter}}" />{{file_name}}</label>
-                {% endif %}
-            {% endfor %}
+            <select id="select" name="select" multiple="multiple">
+                {% for file_name in files_name %}
+                    {% if forloop.counter > 4 and forloop.counter < 8 %}
+                        <!--<label for="champ{{forloop.counter}}" class="btn btn-default"><input type="checkbox" value="{{file_name}}" name="champ{{forloop.counter}}" id="champ{{forloop.counter}}" checked/>{{file_name}}</label>-->
+                        <option value="{{file_name}}" selected>{{file_name}}</option>
+                    {% else %}
+                        <!--<label for="champ{{forloop.counter}}" class="btn btn-default"><input type="checkbox" value="{{file_name}}" name="champ{{forloop.counter}}" id="champ{{forloop.counter}}" />{{file_name}}</label>-->
+                        <option value="{{file_name}}">{{file_name}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
         </div>
         <div class="col-md-offset-4">
             <input type="button" value="clear" class="btn btn-danger" id="clear" />

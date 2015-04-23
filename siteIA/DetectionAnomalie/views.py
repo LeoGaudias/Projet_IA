@@ -54,10 +54,10 @@ def traiter(request):
 
         values = []
         names = []
-        for i in request.POST:
-            if i not in ['N', 'k', 'files', 'csrfmiddlewaretoken']:
-                values.append(i.split('p')[1])
-                names.append(request.POST[i])
+        champs = json.loads(json.loads(request.POST['cache']))
+        for champ in champs['data']:  # lecture du json
+            values.append(champ['id'])
+            names.append(champ['value'])
 
         kMeanClusterer = KMeanClusterer(k, "files/"+file, N, values)
         kMeanClusterer.performClustering()
