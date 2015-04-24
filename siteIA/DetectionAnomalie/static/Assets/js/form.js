@@ -75,4 +75,22 @@ $(document).ready(function()
         $('#select').multiselect('select', ['src_bytes', 'dst_bytes', 'land']);
         maj_cache();
     });
+
+    $("#all").click(function()
+    {
+        /*var i=1;
+
+        $('input:checkbox').each(function()
+        {
+            if(i>=5)
+            {
+                $(this).prop("checked",true);
+            }
+            i++;
+        });*/
+
+        $('#select').multiselect('selectAll', false);
+        $('#select').multiselect('updateButtonText');
+        maj_cache();
+    });
 });

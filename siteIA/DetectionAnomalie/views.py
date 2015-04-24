@@ -49,7 +49,7 @@ def read_file(path):
 def traiter(request):
     try:
         file = request.POST['files']
-        N = int(request.POST['N'])
+        N = float(request.POST['N'])
         k = int(request.POST['k'])
 
         values = []
@@ -74,26 +74,28 @@ def traiter(request):
         nodes = []
         links = []
         total_obs = 0
-        num_col = len(kMeanClusterer.getCluster(0).getCentroid())
         for i in range(kMeanClusterer.getClusterNumber()):
             tab_col_x = 0
             tab_col_y = 0
+            num_col = 1
             for column in kMeanClusterer.getCluster(i).getCentroid():
                 if num_col <= len(kMeanClusterer.getCluster(i).getCentroid())/2:
                     tab_col_x += trunc(pow(float(column), 2))
                 else:
                     tab_col_y += trunc(pow(float(column), 2))
+                num_col += 1
             centroids.append({'number': i, 'x': sqrt(tab_col_x), 'y': sqrt(tab_col_y)})
             num_obs = 0
             for obs in kMeanClusterer.getCluster(i).getObservations():
                 tab_col_x = 0
                 tab_col_y = 0
-
+                num_col = 1
                 for column in obs:
                     if num_col <= len(obs)/2:
                         tab_col_x += trunc(pow(float(column), 2))
                     else:
                         tab_col_y += trunc(pow(float(column), 2))
+                    num_col += 1
                 tab.append({'number': i, 'x': sqrt(tab_col_x), 'y': sqrt(tab_col_y)})
 
                 nodes.append({'name': 'obs '+str(num_obs), 'group': i})

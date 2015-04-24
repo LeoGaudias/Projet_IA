@@ -78,10 +78,10 @@ $(document).ready(function()
 
         var data = jQuery.parseJSON(jsonStr.replace(/&quot;/g,'"'));
 
-        console.log(data);
+        //console.log(data);
 
-        var width = 700,
-          height = 700;
+        var width = 1200,
+          height = 1200;
 
         var color = d3.scale.category20();
 
