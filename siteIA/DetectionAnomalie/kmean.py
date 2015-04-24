@@ -49,9 +49,9 @@ class KMeanClusterer():
 
     def computeDistance(self, obs, centroid):
         distance = 0
-        # len - 1 pour ne pas prendre le nom de la classe
+        
         try:
-            for i in range(0, len(obs)): # -1 enlevé
+            for i in range(0, len(obs)): 
                 distance = distance + pow((float(obs[i]) - float(centroid[i])), 2)
         except(IndexError):
             pass
@@ -68,8 +68,8 @@ class KMeanClusterer():
             currentCluster.updateCentroid()
 
     def extractComportements(self,i):
-        #data = []
-        #cluster = self.getCluster(i)
+        
+
         observations = []
         for obs in self.getCluster(i).getObservations():
             tab = []
@@ -83,30 +83,30 @@ class KMeanClusterer():
         for obs in observations:
             obs.pop()
         n = int((self.n*len(observations))/100)
-            #data.append(observations[:n])
+            
         return observations[:n]
 
     def extractValuesGraph(self):
         
         data = []
-        #data.append(["Cluster","Observations normales","Observations anormales"])
+        
         for i in range(self.getClusterNumber()):
             cluster = self.getCluster(i)
             len_anomalie = len(self.extractComportements(i))
             len_normale = len(cluster.getObservations()) - len_anomalie
-            #data.append([str(i), str(len_normale), str(len_anomalie)])
+            
             data.append({"Cluster": str(i), "Observations anormales": str(len_anomalie),"Observations normales": str(len_normale)})
         return(json.dumps(data))
-        #f_data = dict(((j,i), data[i][j]) for i in range(len(data)) for j in range(len(data[0])) if i<j)
+        
       
 
     def __init__(self, k, datafile, n, values):
         norm = Normalizer()
         data = norm.load_csv(datafile, values)
         self.clusters = []
-        # self.data_matrix = [data[i:i+k] for i in range(0,len(data), k)]
-        self.data_matrix = list(split(data, k))
-        #print(self.data_matrix[0])
+        
+        self.data_matrix = list(self.split(data, k))
+        
         for i in range(0, k):
             l = randint(0, len(self.data_matrix[i]) - 1)
             self.clusters.append(Cluster(self.data_matrix[i][l]))
@@ -114,9 +114,9 @@ class KMeanClusterer():
         self.n = n
 
 
-def split(a, n):
-    k, m = len(a) / n, len(a) % n
-    return (a[int(i * k + min(i, m)):int((i + 1) * k + min(i + 1, m))] for i in range(n))
+    def split(self,a, n):
+        k, m = len(a) / n, len(a) % n
+        return (a[int(i * k + min(i, m)):int((i + 1) * k + min(i + 1, m))] for i in range(n))
 
 
 class Cluster():
@@ -136,16 +136,14 @@ class Cluster():
         self.observations = list(observations)
 
     def updateCentroid(self):
-        mean = [0] * (len(self.centroid))  # 4
+        mean = [0] * (len(self.centroid))  
         j = 0
         if len(self.observations) > 0:
-            for obs in self.observations:  # 50
-                for i in range(len(obs)):  # ne pas prendre le nom de la classe -1 enlevé
-                    #print(str(i) + " " + str(j))
-
+            for obs in self.observations:  
+                for i in range(len(obs)):  
                     mean[i] += float(obs[i])
                 j += 1
-            for i in range(len(obs)):  # 4 -1 enlevé
+            for i in range(len(obs)):  
                 mean[i] /= len(self.observations)
             self.centroid = mean
 

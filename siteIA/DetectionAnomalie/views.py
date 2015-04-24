@@ -62,12 +62,6 @@ def traiter(request):
         kMeanClusterer = KMeanClusterer(k, "files/"+file, N, values)
         kMeanClusterer.performClustering()
 
-        '''json_data = []
-        for i in range(kMeanClusterer.getClusterNumber()):
-            cluster = {'number': i, 'obs': kMeanClusterer.getCluster(i).getObservations()}
-            json_data.append(cluster)
-
-        tab = {'names': names, 'values': json_data}'''
 
         tab = []
         centroids = []
@@ -116,5 +110,3 @@ def traiter(request):
         return redirect('formulaire')
 
     return render(request, 'DetectionAnomalie/affichage.html', {'tab': tab, 'json': json.dumps(json1), 'json2': json.dumps(json2)})
-    #return render(request, 'DetectionAnomalie/affichage.html', tab)
-    #return HttpResponse(request)
